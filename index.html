@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HACKERSBAY: Cyber Escape Room</title>
+<style>
+:root{--bg:#050a14;--pn:#0a1424;--cy:#00f0ff;--gr:#39ff88;--rd:#ff3355;--yl:#ffd400;--tx:#cfe9f5;--mu:#6d8aa0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 "Courier New",ui-monospace,monospace;min-height:100vh;
+background-image:linear-gradient(rgba(0,240,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,.05) 1px,transparent 1px);background-size:36px 36px}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent 0 3px,rgba(0,0,0,.18) 3px 4px)}
+.w{max-width:1100px;margin:0 auto;padding:16px}
+h1{margin:0;color:var(--cy);letter-spacing:.2em;text-shadow:0 0 14px var(--cy);font-size:clamp(22px,5vw,38px);text-align:center}
+.sub{text-align:center;color:var(--gr);letter-spacing:.4em;font-size:12px;margin-bottom:14px}
+.p{background:var(--pn);border:1px solid var(--cy);box-shadow:0 0 14px rgba(0,240,255,.25),inset 0 0 20px rgba(0,240,255,.05);padding:14px;margin:12px 0;border-radius:4px}
+.p h3{margin:0 0 8px;color:var(--gr);font-size:13px;letter-spacing:.2em}
+button{background:transparent;color:var(--cy);border:1px solid var(--cy);padding:9px 14px;font:inherit;letter-spacing:.1em;cursor:pointer;margin:3px;border-radius:3px}
+button:hover{background:var(--cy);color:#000;box-shadow:0 0 12px var(--cy)}
+button.g{color:var(--gr);border-color:var(--gr)}button.g:hover{background:var(--gr);color:#000}
+button.r{color:var(--rd);border-color:var(--rd)}button.r:hover{background:var(--rd);color:#fff}
+button:disabled{opacity:.4;pointer-events:none}
+input[type=text]{background:#000;color:var(--gr);border:1px solid var(--cy);padding:10px;font:inherit;width:100%;margin:4px 0 10px;text-transform:none}
+.big{font-size:clamp(34px,9vw,64px);color:var(--cy);text-shadow:0 0 18px var(--cy);letter-spacing:.2em;text-align:center}
+.tm{font-size:34px;color:var(--yl);text-shadow:0 0 10px var(--yl)}.tm.lo{color:var(--rd);animation:bl .6s infinite}
+@keyframes bl{50%{opacity:.4}}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+.opt{display:block;width:100%;text-align:left;margin:6px 0}.opt.sel{background:rgba(57,255,136,.18);color:var(--gr);border-color:var(--gr)}
+.mail{border:1px dashed var(--mu);padding:10px;margin:8px 0;font-size:13px}.mail.sel{border:1px solid var(--gr);background:rgba(57,255,136,.08)}
+pre{background:#000;border:1px solid var(--mu);padding:10px;overflow-x:auto;color:var(--gr);font-size:13px}
+.ov{position:fixed;inset:0;background:#02060c;z-index:9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.gl{animation:gl .35s infinite;color:var(--gr);font-size:clamp(26px,7vw,52px);text-shadow:2px 0 var(--rd),-2px 0 var(--cy)}
+@keyframes gl{25%{transform:translate(3px,-2px)}50%{transform:translate(-3px,2px) skewX(6deg)}75%{transform:translate(2px,1px)}}
+.bar{width:min(400px,80vw);height:10px;border:1px solid var(--cy)}.bar i{display:block;height:100%;background:var(--cy);animation:ld 2.2s linear forwards}
+@keyframes ld{from{width:0}to{width:100%}}
+.scan{position:fixed;left:0;right:0;height:3px;background:var(--cy);box-shadow:0 0 16px var(--cy);animation:sc 1.6s linear infinite}
+@keyframes sc{from{top:0}to{top:100%}}
+.in{animation:fi .6s}@keyframes fi{from{opacity:0;transform:translateY(14px)}}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid #12304a;padding:6px;text-align:left}th{color:var(--mu)}
+.ok{color:var(--gr)}.no{color:var(--rd)}.wn{color:var(--yl)}.mu{color:var(--mu)}
+.hint{border-color:var(--yl);color:var(--yl)}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* ============ PASTE YOUR FIREBASE CONFIG HERE (replace the whole object) ============ */
+const FB_CONFIG = {
+  apiKey: "AIzaSyAlaLEZWuu1Ti2dBK8_FgP9S501plvvb3o",
+  authDomain: "hackersbay-cc1f9.firebaseapp.com",
+  databaseURL: "https://hackersbay-cc1f9-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "hackersbay-cc1f9",
+  appId: "1:687437089129:web:eba92cb4cc3bd8c2fc55f8"
+};
+/* ==================================================================================== */
+</script>
+</head><body><div class="w"><h1>HACKERSBAY</h1><div class="sub">CYBER ESCAPE ROOM</div><div id="app"></div></div><div id="ovl"></div>
+<script>
+const $=s=>document.querySelector(s),app=$('#app');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ST=k=>{try{return localStorage.getItem(k)}catch(e){return null}},SS=(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}};
+const rid=n=>[...Array(n)].map(()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.random()*32|0]).join('');
+let db=null,G=null,teams=[],code=null,me=null,mode=location.hash==='#host'?'host':'player';
+// ---------- CONTENT ----------
+const Q6=[["Which attack tricks users into giving credentials via fake messages?",["Phishing","Defrag","Overclock"],0],["What does MFA stand for?",["Multi-Factor Authentication","Main Firewall Access","Managed File Archive"],0],["Which port does HTTPS use by default?",["80","443","21"],1],["What type of malware encrypts files and demands payment?",["Spyware","Ransomware","Adware"],1],["What does a firewall do?",["Filters network traffic","Speeds up Wi-Fi","Stores passwords"],0]];
+const ROOMS=[null,
+{n:"PHISHING DETECTION",hint:"Look for urgency, suspicious sender details and requests for immediate action.",q:"Which message is the phishing attempt?",
+ body:()=>[["security@paypa1-support.com","URGENT: Account suspended! Verify within 1 hour at http://paypa1-secure-login.biz or lose access."],["hr@yourcollege.edu","Reminder: the cybersecurity club meets Thursday 5 PM in Lab 3. No action needed."],["noreply@github.com","A new sign-in to your account was detected from Chrome on Windows. If this was you, ignore this email."]].map((m,i)=>`<div class="mail" data-i="${i}" onclick="pick(this)"><b>From:</b> ${esc(m[0])}<br>${esc(m[1])}</div>`).join(''),
+ get:()=>{const e=document.querySelector('.sel');return e?+e.dataset.i:null},chk:a=>a===0,show:a=>'Message '+(a+1),done:"ANSWER SUBMITTED"},
+{n:"CYBER FORENSICS",hint:"Many failed logins followed by a success from a foreign IP means credentials were guessed.",q:"What most likely happened?",
+ body:()=>`<pre>Login time ........ 03:12 AM (outside work hours)
+IP address ........ 185.220.101.47 (foreign, known Tor exit)
+Device ............ Unknown Linux, never seen before
+Failed attempts ... 48 in 2 minutes, then 1 success
+Suspicious file ... /tmp/.update_svc.sh (created 03:14)</pre>`+["A normal employee logged in late","A brute-force attack succeeded and a backdoor script was planted","The server had a hardware failure"].map((t,i)=>`<button class="opt" data-i="${i}" onclick="pick(this)">${String.fromCharCode(65+i)}. ${esc(t)}</button>`).join(''),
+ get:()=>{const e=document.querySelector('.sel');return e?+e.dataset.i:null},chk:a=>a===1,show:a=>'Option '+'ABC'[a],done:"ANSWER SUBMITTED"},
+{n:"DECODE THE MESSAGE",hint:"Caesar shift is 3 backwards. Binary is 8 bits per letter. Morse: dashes and dots.",q:"Decode all three words.",
+ body:()=>`<p>1. Caesar cipher (shift +3): <b class="wn">VHFXULWB</b></p><input type="text" id="d0" placeholder="Word 1"><p>2. Binary: <b class="wn">01001000 01000001 01000011 01001011</b></p><input type="text" id="d1" placeholder="Word 2"><p>3. Morse: <b class="wn">-.-. --- -.. .</b></p><input type="text" id="d2" placeholder="Word 3">`,
+ get:()=>{const v=[0,1,2].map(i=>$('#d'+i).value.trim().toUpperCase());return v.every(Boolean)?v.join(' '):null},chk:a=>a==='SECURITY HACK CODE',show:a=>a,done:"DECRYPTION COMPLETE"},
+{n:"PASSWORD CHALLENGE",hint:"Field = Cyber. Separator in an email address = @. Hours in a day = 24.",q:"Enter the password.",
+ body:()=>`<ul><li>8 characters</li><li>Uppercase and lowercase</li><li>Numbers</li><li>One special character</li><li>Related to cybersecurity</li></ul><p class="wn">First five letters = the field being played<br>Special character = what separates username and domain<br>Two digits = number of hours in a day</p><input type="text" id="pw" placeholder="********" autocomplete="off">`,
+ get:()=>$('#pw').value.trim()||null,chk:a=>a==='Cyber@24',show:a=>a,done:"PASSWORD VERIFIED"},
+{n:"FIND THE VULNERABILITY",hint:"User input is concatenated directly into the query string.",q:"What security vulnerability is present?",
+ body:()=>`<pre>// FICTIONAL EDUCATIONAL EXAMPLE
+let user = request.get("username");
+let query = "SELECT * FROM users WHERE name = '" + user + "'";
+database.run(query);</pre>`+["Phishing","SQL Injection","DDoS","Malware"].map((t,i)=>`<button class="opt" data-i="${i}" onclick="pick(this)">${String.fromCharCode(65+i)}. ${t}</button>`).join(''),
+ get:()=>{const e=document.querySelector('.sel');return e?+e.dataset.i:null},chk:a=>a===1,show:a=>'ABCD'[a],done:"VULNERABILITY IDENTIFIED"},
+{n:"FINAL CYBER BOMB",hint:"Think fundamentals: MFA, HTTPS port 443, firewalls filter traffic.",q:"FINAL SECURITY LOCK: answer all 5 before time runs out.",
+ body:()=>Q6.map((q,i)=>`<p>${i+1}. ${esc(q[0])}</p>`+q[1].map((t,j)=>`<button class="opt q6" data-q="${i}" data-i="${j}" onclick="pick6(this)">${esc(t)}</button>`).join('')).join(''),
+ get:()=>{const v=Q6.map((q,i)=>{const e=document.querySelector(`.q6.sel[data-q="${i}"]`);return e?+e.dataset.i:null});return v.includes(null)?null:v},chk:a=>a.filter((x,i)=>x===Q6[i][2]).length,show:a=>a.map(x=>x+1).join(','),done:"FINAL LOCK SUBMITTED"}];
+const STATE=['LOBBY','ROOM_1','ROOM_2','ROOM_3','ROOM_4','ROOM_5','ROOM_6','FINAL_RESULTS','GAME_ENDED'];
+window.pick=e=>{e.parentNode.querySelectorAll('.opt,.mail').forEach(x=>x.classList.remove('sel'));e.classList.add('sel')};
+window.pick6=e=>{document.querySelectorAll(`.q6[data-q="${e.dataset.q}"]`).forEach(x=>x.classList.remove('sel'));e.classList.add('sel')};
+// ---------- SHARED ----------
+let uid=null;
+const mkSnap=v=>({exists:v!=null,data:()=>v});
+const pth=p=>{const [c,k]=p.split('/');if(c==='teams'){const i=k.indexOf('_');return 'teams/'+k.slice(0,i)+'/'+k.slice(i+1)}return p};
+function mkDb(){const r=p=>firebase.database().ref(p);
+ return{doc:p=>({get:async()=>mkSnap((await r(pth(p)).get()).val()),set:o=>r(pth(p)).set(o),onSnapshot:f=>{r(pth(p)).on('value',s=>f(mkSnap(s.val())))}}),
+ collection:()=>({where:(a,b,v)=>{const rf=r('teams/'+v),q=s=>({docs:Object.values(s.val()||{}).map(d=>({data:()=>d}))});return{get:async()=>q(await rf.get()),onSnapshot:f=>{rf.on('value',s=>f(q(s)))}}}})}}
+
+const roomNo=()=>G&&G.state.startsWith('ROOM_')?+G.state.slice(5):0;
+const remain=()=>{if(!G)return 60;const el=(G.tBase||0)+(G.tRun?Date.now()-G.tStart:0);return Math.max(0,Math.ceil(((G.tDur||60000)-el)/1000))};
+const score=t=>Object.values(t.answers||{}).reduce((s,a)=>s+(a.pts||0),0)-20*Object.keys(t.hp||{}).length;
+const board=()=>[...teams].sort((a,b)=>score(b)-score(a));
+const lb=()=>`<table>${board().map((t,i)=>`<tr><td>${i+1}.</td><td>${esc(t.name)}</td><td>${score(t)}</td></tr>`).join('')||'<tr><td class="mu">No teams yet</td></tr>'}</table>`;
+const tick=()=>{const e=$('#tm');if(e){const r=remain();e.textContent=String(r).padStart(2,'0');e.className='tm'+(r<=10?' lo':'')}};
+setInterval(tick,250);
+async function init(){
+ app.innerHTML='<div class="p">Connecting to mission server...</div>';
+ try{
+  if(FB_CONFIG.apiKey.startsWith('PASTE'))throw new Error('Firebase config not set');
+  firebase.initializeApp(FB_CONFIG);
+  await firebase.auth().signInAnonymously();
+  uid=firebase.auth().currentUser.uid;db=mkDb();
+ }catch(e){app.innerHTML='<div class="p"><span class="no">CONNECTION FAILED.</span> '+esc(e.message)+'<br>Check the Firebase config at the top of the file, that Anonymous sign-in is enabled, and that the Realtime Database exists.</div>';return}
+ mode==='host'?hostInit():playerInit();
+}
+function watch(c){code=c;
+ db.doc('games/'+c).onSnapshot(s=>{const o=G;G=s.exists?s.data():null;onGame(o)});
+ db.collection('teams').where('code','==',c).onSnapshot(q=>{teams=q.docs.map(d=>d.data());onTeams()});
+}
+// ---------- HOST ----------
+function hostInit(){const c=ST('hb_host');c?watch(c):hostHome()}
+function hostHome(){app.innerHTML=`<div class="p"><h3>HOST CONSOLE</h3><button class="g" onclick="create()">CREATE GAME</button></div>`}
+window.create=async()=>{const c=rid(6);if((await db.doc('games/'+c).get()).exists)return create();await db.doc('games/'+c).set({state:'LOBBY',locked:false,tRun:false,tBase:0,tStart:0,tDur:60000,hints:{},roomStart:0,seq:0,hostUid:uid});SS('hb_host',c);watch(c)};
+const upd=p=>db.doc('games/'+code).set({...G,...p});
+const goRoom=n=>upd({state:n>6?'FINAL_RESULTS':'ROOM_'+n,roomStart:Date.now(),locked:false,seq:(G.seq||0)+1,tRun:false,tBase:0});
+window.H={start:()=>goRoom(1),next:()=>{const r=roomNo();if(r&&r<6)goRoom(r+1)},prev:()=>{const r=roomNo();if(r>1)goRoom(r-1)},
+ ts:()=>!G.tRun&&upd({tRun:true,tStart:Date.now()}),
+ tp:()=>G.tRun&&upd({tRun:false,tBase:(G.tBase||0)+Date.now()-G.tStart}),
+ tr:()=>upd({tRun:false,tBase:0,tStart:0}),
+ hint:()=>roomNo()&&upd({hints:{...G.hints,['r'+roomNo()]:true}}),
+ lock:v=>upd({locked:v}),end:()=>confirm('End the game for everyone?')&&upd({state:'FINAL_RESULTS',seq:(G.seq||0)+1}),
+ ov:async(id,r,ok)=>{const t=teams.find(x=>x.id===id),a=t.answers['r'+r];a.ok=ok;a.done=ok;a.pts=ok?100-10*(a.w||0):-10*(a.w||0);await db.doc('teams/'+code+'_'+id).set(t)},
+ clear:()=>{SS('hb_host',null);location.reload()}};
+function onGame(){if(mode==='host')hostRender()}
+function onTeams(){if(mode==='host')hostRender();else playerTeams()}
+function hostRender(){
+ if(!G){app.innerHTML='<div class="p no">Game not found. <button onclick="H.clear()">RESET</button></div>';return}
+ const r=roomNo(),L=G.state==='LOBBY',now=Date.now();
+ const rows=board().map(t=>{const a=(t.answers||{})['r'+r];return `<tr><td>${esc(t.name)}</td><td class="${now-t.seen<20000?'ok':'no'}">${now-t.seen<20000?'ONLINE':'OFFLINE'}</td><td>${a?'<span class="ok">YES</span>':'<span class="mu">no</span>'}</td><td>${score(t)}</td></tr>`}).join('');
+ const ans=r?board().filter(t=>(t.answers||{})['r'+r]).map(t=>{const a=t.answers['r'+r];return `<tr><td>${esc(t.name)}</td><td>${esc(a.show)}</td><td class="${a.ok?'ok':'no'}">${a.ok?'CORRECT':'WRONG'}</td><td>${a.t}s</td><td>${a.pts}</td><td><button class="g" onclick="H.ov('${t.id}',${r},true)">✓</button><button class="r" onclick="H.ov('${t.id}',${r},false)">✕</button></td></tr>`}).join(''):'';
+ app.innerHTML=`<div class="p"><div class="row"><div><h3>GAME CODE</h3><div class="big" style="text-align:left">${code}</div></div><div><h3>STATUS</h3>${G.state}${G.locked?' <span class="no">[LOCKED]</span>':''}<br>${r?'ROOM '+r+' / 6 — '+ROOMS[r].n:'—'}</div><div><h3>TIMER</h3><span class="tm" id="tm">${remain()}</span></div></div></div>
+ <div class="p"><h3>CONTROLS</h3><button class="g" onclick="H.start()" ${L?'':'disabled'}>START GAME</button><button onclick="H.next()" ${r&&r<6?'':'disabled'}>NEXT ROOM</button><button onclick="H.prev()" ${r>1?'':'disabled'}>PREVIOUS ROOM</button><button onclick="H.ts()" ${r?'':'disabled'}>START TIMER</button><button onclick="H.tp()">PAUSE TIMER</button><button onclick="H.tr()">RESET TIMER</button><button onclick="H.hint()" ${r?'':'disabled'}>REVEAL HINT</button><button onclick="H.lock(true)" ${r?'':'disabled'}>LOCK ROOM</button><button onclick="H.lock(false)" ${r?'':'disabled'}>UNLOCK ROOM</button><button class="r" onclick="H.end()" ${L?'disabled':''}>END GAME</button></div>
+ <div class="p"><h3>CONNECTED TEAMS (${teams.length})</h3><table><tr><th>Team</th><th>Connected</th><th>Answered</th><th>Score</th></tr>${rows||'<tr><td class="mu">Waiting for teams to join with the code...</td></tr>'}</table></div>
+ ${r?`<div class="p"><h3>ANSWERS — ROOM ${r}</h3><table><tr><th>Team</th><th>Answer</th><th>Result</th><th>Time</th><th>Score</th><th>Override</th></tr>${ans||'<tr><td class="mu">No answers yet</td></tr>'}</table></div>`:''}
+ <div class="p"><h3>LEADERBOARD</h3>${lb()}</div><button class="r" onclick="H.clear()">NEW GAME / FORGET THIS ONE</button>`;
+}
+setInterval(()=>{if(mode==='host'&&G)hostRender()},5000);
+// ---------- PLAYER ----------
+let shownKey=null,lastSeq=null,busy=false;
+function playerInit(){const s=ST('hb_pl');if(s){const o=JSON.parse(s);me=o.id;watch(o.code)}else joinForm()}
+function joinForm(err){app.innerHTML=`<div class="p"><h3>JOIN GAME</h3>GAME CODE<input type="text" id="gc" maxlength="6" placeholder="ABC123">TEAM NAME<input type="text" id="tn" maxlength="20" placeholder="BYTEBREAKERS"><button class="g" onclick="join()">JOIN MISSION</button><div class="no">${err||''}</div></div>`}
+window.join=async()=>{const c=$('#gc').value.trim().toUpperCase(),n=$('#tn').value.trim();if(!c||!n)return joinForm('Enter code and team name.');
+ const g=await db.doc('games/'+c).get();if(!g.exists)return joinForm('Invalid game code.');
+ const q=await db.collection('teams').where('code','==',c).get();
+ if(q.docs.some(d=>d.data().name.toLowerCase()===n.toLowerCase()))return joinForm('Team name already taken in this game.');
+ me=rid(10);await db.doc('teams/'+c+'_'+me).set({id:me,uid:uid,code:c,name:n,answers:{},hp:{},seen:Date.now()});
+ SS('hb_pl',JSON.stringify({code:c,id:me}));watch(c)};
+const T=()=>teams.find(t=>t.id===me);
+setInterval(()=>{const t=T();if(mode==='player'&&t)db.doc('teams/'+code+'_'+me).set({...t,seen:Date.now()}).catch(()=>{})},6000);
+function onGame(o){if(mode==='host')return hostRender();
+ if(!G){app.innerHTML='<div class="p no">Game ended or not found.</div>';SS('hb_pl',null);return}
+ const sq=G.seq||0,r=roomNo();
+ if(lastSeq!==null&&sq!==lastSeq&&r)return transition(r);
+ lastSeq=sq;paint()}
+function playerTeams(){const t=T();if(!t)return;
+ const r=roomNo();if(r&&G&&G.hints&&G.hints['r'+r]&&!(t.hp||{})['r'+r]){t.hp={...(t.hp||{}),['r'+r]:1};t.score=score(t);db.doc('teams/'+code+'_'+me).set(t)}
+ paint()}
+function transition(r){lastSeq=G.seq||0;shownKey=null;
+ $('#ovl').innerHTML=`<div class="ov"><div class="scan"></div><div style="font-size:60px">🔓</div><div class="gl">ACCESS GRANTED</div><div class="ok">SECURITY LAYER BYPASSED</div><div>ROOM ${r-1>0?r-1:'—'} ↓ ROOM ${r}</div><div class="bar"><i></i></div><div class="mu">&gt; loading sector ${r}_</div></div>`;
+ setTimeout(()=>{$('#ovl').innerHTML='';paint()},2400)}
+function paint(){const t=T();if(!G||!t||$('#ovl').innerHTML)return;
+ const r=roomNo(),a=(t.answers||{})['r'+r],hint=r&&G.hints&&G.hints['r'+r];
+ const key=[G.state,G.locked,a&&a.done,hint,a&&a.w,r===0?teams.length:0].join('|');
+ if(key===shownKey){return}shownKey=key;
+ const head=`<div class="p row"><div>TEAM: <b class="ok">${esc(t.name)}</b></div><div>${r?'ROOM '+r+' / 6':''}</div><div>SCORE: <b class="wn">${score(t)}</b></div><div class="tm" id="tm">${remain()}</div></div>`;
+ if(G.state==='LOBBY'){app.innerHTML=head+`<div class="p in"><h3>STATUS</h3><div class="gl" style="animation:none">WAITING FOR HOST...</div><p class="mu">Teams connected: ${teams.length}. Stay on this screen.</p></div>`;return}
+ if(G.state==='FINAL_RESULTS'||G.state==='GAME_ENDED'){app.innerHTML=head+`<div class="p in"><h3>FINAL RESULTS</h3>${lb()}</div>`;return}
+ const R=ROOMS[r];
+ let body;
+ if(G.locked)body=`<div class="p no">🔒 ROOM LOCKED BY HOST</div>`;
+ else if(a&&a.done)body=`<div class="p in"><h3>${R.done}</h3><div class="ok">${r===6?'Score this room: '+a.pts:a.ok?'Correct! +'+a.pts+' points':''}</div><div class="gl" style="animation:none;font-size:22px;margin-top:10px">WAITING FOR HOST...</div></div>`;
+ else body=`<div class="p"><h3>${R.q}</h3>${R.body()}<button class="g" onclick="send()">SUBMIT</button><div id="msg" class="no">${a&&!a.ok&&r!==6?'✕ Incorrect (−10). Try again.':''}</div></div>`;
+ app.innerHTML=head+`<div class="p in"><h3>ROOM ${r}: ${R.n}</h3></div>`+(hint?`<div class="p hint">💡 SYSTEM HINT<br>${esc(R.hint)}<br><small>(−20 points)</small></div>`:'')+body;
+}
+window.send=async()=>{if(busy||G.locked)return;const t=T(),r=roomNo(),R=ROOMS[r],raw=R.get();if(raw==null){$('#msg').textContent='Complete your answer first.';return}
+ busy=true;const prev=(t.answers||{})['r'+r]||{},w=prev.w||0,att=(prev.attempts||0)+1,tt=Math.round((Date.now()-G.roomStart)/1000);let rec;
+ if(r===6){const n=R.chk(raw);rec={show:R.show(raw),ok:n===5,done:true,t:tt,attempts:1,w:0,pts:n*20+(n===5?200:0)}}
+ else{const ok=R.chk(raw);rec={show:R.show(raw),ok,done:ok,t:tt,attempts:att,w:ok?w:w+1,pts:ok?100+(att===1?25:0)+(tt<=30?50:0)-10*w:-10*(w+1)}}
+ t.answers={...(t.answers||{}),['r'+r]:rec};t.score=score(t);
+ try{await db.doc('teams/'+code+'_'+me).set(t)}finally{busy=false;shownKey=null;paint()}};
+init();
+</script></body></html>
